@@ -1,0 +1,42 @@
+{
+  "name": "accessors",
+  "version": "0.0.1",
+  "description": "Read and update nested objects using simple patterns.",
+  "main": "index.js",
+  "devDependencies": {
+    "tape" : "~1.1.0"
+  },
+  "scripts" : {
+    "test" : "tape test/*.js"
+  },
+  "keywords": [
+    "accessor",
+    "pattern",
+    "access",
+    "object",
+    "nested",
+    "path"
+  ],
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/10..latest",
+      "chrome/20..latest",
+      "firefox/18..latest",
+      "safari/latest",
+      "opera/11.0..latest",
+      "iphone/6", "ipad/6"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ttaubert/node-accessors.git"
+  },
+  "homepage": "https://github.com/ttaubert/node-accessors",
+  "author": {
+    "name": "Tim Taubert",
+    "email": "tim@timtaubert.de",
+    "url": "http://timtaubert.de/"
+  },
+  "license": "MIT"
+}
