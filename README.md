@@ -22,6 +22,14 @@ Read and update (nested) objects using simple patterns.
     console.log(Accessors.get(obj, "foo.bar"));
     console.log(Accessors.get(obj, "foo.bar2"));
 
+output:
+
+    $ node examples/acc-get.js
+    value
+    default
+    value
+    undefined
+
 ## set
 
     var Accessors = require("accessors");
