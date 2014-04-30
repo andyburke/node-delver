@@ -12,23 +12,27 @@ Read and update (nested) objects using simple patterns.
 
     var Accessors = require("accessors");
 
-    var obj = {foo: {bar: "value"}};
+    var obj = {foo: {bar: "value", arr: [ 1, 2, 3 ]}};
     var acc = Accessors(obj);
 
     console.log(acc.get("foo.bar"));
     console.log(acc.get("foo.bar2", "default"));
+    console.log(acc.get("foo.arr[1]"));
 
     // You don't actually need an Accessors instance.
     console.log(Accessors.get(obj, "foo.bar"));
     console.log(Accessors.get(obj, "foo.bar2"));
+    console.log(Accessors.get(obj, "foo.arr[1]"));
 
 output:
 
     $ node examples/acc-get.js
     value
     default
+    2
     value
     undefined
+    2
 
 ## set
 

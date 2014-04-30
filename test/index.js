@@ -22,6 +22,10 @@ test("get", function (t) {
   t.equal(acc.get(obj, "foo.bar.baz2", "fallback"), "fallback");
   t.equal(acc.get(obj, "foo2.bar.baz", "fallback"), "fallback");
 
+  var obj = { foo: { bar: [ 1, 2, 3 ] } };
+  t.equal(acc.get(obj, "foo.bar[1]", 2), 2);
+  t.equal(acc.get(obj, "foo.bar[100]", "fallback"), "fallback");
+
   var obj = {foo: {}};
   t.equal(acc.get(obj, "foo.bar", "fallback"), "fallback");
   t.equal(acc.get(obj, "foo.bar", "fallback"), "fallback");
@@ -88,6 +92,26 @@ test("set", function (t) {
   acc.set(obj.foo, "baz[]", "value3");
   t.deepEqual(obj.foo.baz, ["value1", "value2", "value3"]);
 
+  acc.set(obj.foo, "boo[]", "value1");
+  acc.set(obj.foo, "boo[]", "value2");
+  acc.set(obj.foo, "boo[]", "value3");
+  t.deepEqual(obj.foo.boo, ["value1", "value2", "value3"]);
+  
+  acc.set(obj.foo, "boo[1]", "fooboo");
+  t.deepEqual(obj.foo.boo, ["value1", "fooboo", "value3"]);
+
+  acc.set(obj.foo, "boo[]", "another");
+  t.deepEqual(obj.foo.boo, ["value1", "fooboo", "value3", "another"]);
+
+  acc.set(obj, "foo.boo[]", "yetanother");
+  t.deepEqual(obj.foo.boo, ["value1", "fooboo", "value3", "another", "yetanother"]);
+
+  acc.set(obj, "foo.boo[].yak", "yes");
+  t.deepEqual(obj.foo.boo, ["value1", "fooboo", "value3", "another", "yetanother", {yak: "yes" }]);
+
+  acc.set(obj, "foo.boo[5].yak", "no");
+  t.deepEqual(obj.foo.boo, ["value1", "fooboo", "value3", "another", "yetanother", {yak: "no" }]);
+  
   t.throws(function () {
     acc.set("string", "key", "value");
   });
@@ -134,14 +158,6 @@ test("set", function (t) {
 
   t.throws(function () {
     acc.set({}, "foo[bar]", "value");
-  });
-
-  t.throws(function () {
-    acc.set({}, "foo[.bar[]", "value");
-  });
-
-  t.throws(function () {
-    acc.set({}, "foo].bar[]", "value");
   });
 
   t.throws(function () {
