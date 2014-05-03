@@ -1,6 +1,6 @@
 {
   "name": "accessors",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Read and update (nested) objects using simple patterns.",
   "main": "index.js",
   "devDependencies": {

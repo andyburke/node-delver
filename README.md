@@ -99,6 +99,10 @@ MIT
 
 # changelog
 
+0.0.4
+-----
+* Add component support
+
 0.0.3
 -----
 * Allow for array element access

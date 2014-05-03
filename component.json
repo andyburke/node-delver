@@ -1,0 +1,24 @@
+{
+  "name": "accessors",
+  "version": "0.0.4",
+  "repo": "ttaubert/node-accessors",
+  "author": {
+    "name": "Tim Taubert",
+    "email": "tim@timtaubert.de",
+    "url": "http://timtaubert.de/"
+  },
+  "homepage": "https://github.com/ttaubert/node-accessors",
+  "description": "Read and update (nested) objects using simple patterns.",
+  "keywords": [
+    "accessor",
+    "pattern",
+    "access",
+    "object",
+    "nested",
+    "path"
+  ],
+  "license": "MIT",
+  "scripts": [
+    "index.js"
+  ]
+}
