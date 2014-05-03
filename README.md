@@ -97,3 +97,8 @@ npm install accessors
 
 MIT
 
+# changelog
+
+0.0.3
+-----
+* Allow for array element access
