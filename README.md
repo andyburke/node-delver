@@ -2,7 +2,7 @@
 
 Read and update nested objects using simple patterns.
 
-# examples
+# Examples
 
 ## get
 
@@ -66,7 +66,7 @@ output:
     [ 'value1', 'value2', 'value3' ]
 ```
 
-# methods
+# Methods
 
 new Devler( object )
 -----------------
@@ -93,7 +93,7 @@ Delver.set( object, key, value )
 
 Sets the given `object`'s value to `value` at the given `key` and overrides it if it already exists.
 
-# install
+# Install
 
 With [npm](https://npmjs.org) do:
 
@@ -101,11 +101,17 @@ With [npm](https://npmjs.org) do:
 npm install delver
 ```
 
-# license
+For [component](http://component.io) do:
+
+```
+component install andyburke/node-delver
+```
+
+# License
 
 MIT
 
-# changelog
+# Changelog
 
 0.0.5
 -----
@@ -121,7 +127,7 @@ MIT
 -----
 * Allow for array element access
 
-# credits
+# Credits
 
 Delver is based off a fork of Tim Taubert's [node-accessors](https://github.com/ttaubert/node-accessors). Many
 thanks to him for a great little library.
