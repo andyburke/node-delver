@@ -1,16 +1,24 @@
 {
-  "name": "accessors",
-  "version": "0.0.4",
-  "repo": "ttaubert/node-accessors",
+  "name": "delver",
+  "version": "0.0.5",
+  "repo": "andyburke/node-delver",
   "author": {
-    "name": "Tim Taubert",
-    "email": "tim@timtaubert.de",
-    "url": "http://timtaubert.de/"
+    "name": "Andy Burke",
+    "email": "aburke@bitflood.org",
+    "url": "http://github.com/andyburke"
   },
-  "homepage": "https://github.com/ttaubert/node-accessors",
-  "description": "Read and update (nested) objects using simple patterns.",
+  "contributors": [
+    {
+      "name": "Tim Taubert",
+      "email": "tim@timtaubert.de",
+      "url": "http://timtaubert.de/"
+    }
+  ],
+  "homepage": "https://github.com/andyburke/node-delver",
+  "description": "Read and update nested objects using simple patterns.",
   "keywords": [
     "accessor",
+    "traversal",
     "pattern",
     "access",
     "object",
