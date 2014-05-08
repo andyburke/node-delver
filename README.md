@@ -120,3 +120,20 @@ MIT
 0.0.3
 -----
 * Allow for array element access
+
+# credits
+
+Delver is based off a fork of Tim Taubert's [node-accessors](https://github.com/ttaubert/node-accessors). Many
+thanks to him for a great little library.
+
+Delver was created to enable a couple of additional features:
+  * array level element access, eg:
+  
+  ```javascript
+      Delver.get( obj, 'foo.bar[3]' ); // get element with index 3 of array 'bar'
+      Delver.set( obj, 'foo.bar[4].baz', 'yak' ); // set field 'baz' of element with index 4 of array 'bar'
+  ```
+  
+  * allow for a less strict traversal of objects
+    * specifically, I needed to support [mongoose](http://mongoosejs.com/) objects which have accessors instead of hasOwnProperty()-checkable members
+  * add ability to enable/disable automatic path creation
