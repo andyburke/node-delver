@@ -7,63 +7,63 @@ Read and update nested objects using simple patterns.
 ## get
 
 ```javascript
-    var Delver = require( 'delver' );
+var Delver = require( 'delver' );
 
-    var obj = {
-        foo: {
-            bar: 'value',
-            arr: [ 1, 2, 3 ]
-        }
-    };
+var obj = {
+    foo: {
+        bar: 'value',
+        arr: [ 1, 2, 3 ]
+    }
+};
 
-    var delver = new Delver( obj );
+var delver = new Delver( obj );
 
-    console.log( delver.get( 'foo.bar' ) );
-    console.log( delver.get( 'foo.bar2', 'default' ) );
-    console.log( delver.get( 'foo.arr[1]' ) );
+console.log( delver.get( 'foo.bar' ) );
+console.log( delver.get( 'foo.bar2', 'default' ) );
+console.log( delver.get( 'foo.arr[1]' ) );
 
-    // You don't actually need a Delver instance.
-    console.log( Delver.get( obj, 'foo.bar' ) );
-    console.log( Delver.get( obj, 'foo.bar2' ) );
-    console.log( Delver.get( obj, 'foo.arr[1]' ) );
+// You don't actually need a Delver instance.
+console.log( Delver.get( obj, 'foo.bar' ) );
+console.log( Delver.get( obj, 'foo.bar2' ) );
+console.log( Delver.get( obj, 'foo.arr[1]' ) );
 ```
 
 output:
 
 ```
-    value
-    default
-    2
-    value
-    undefined
-    2
+value
+default
+2
+value
+undefined
+2
 ```
 
 ## set
 
 ```javascript
-    var Delver = require( 'delver' );
+var Delver = require( 'delver' );
 
-    var obj = {};
-    var delver = new Delver( obj );
+var obj = {};
+var delver = new Delver( obj );
 
-    delver.set( 'foo.bar', 'value' );
-    console.log( delver.get( 'foo.bar' ) );
+delver.set( 'foo.bar', 'value' );
+console.log( delver.get( 'foo.bar' ) );
 
-    delver.set( 'foo.baz[]', 'value1' );
-    delver.set( 'foo.baz[]', 'value2' );
+delver.set( 'foo.baz[]', 'value1' );
+delver.set( 'foo.baz[]', 'value2' );
 
-    // You don't actually need a Delver instance.
-    Delver.set( obj, 'foo.baz[]', 'value3' );
+// You don't actually need a Delver instance.
+Delver.set( obj, 'foo.baz[]', 'value3' );
 
-    console.log( delver.get( 'foo.baz' ) );
+console.log( delver.get( 'foo.baz' ) );
 ```
 
 output:
 
 ```
-    value
-    [ 'value1', 'value2', 'value3' ]
+value
+[ 'value1', 'value2', 'value3' ]
 ```
 
 # Methods
