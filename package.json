@@ -1,7 +1,7 @@
 {
-  "name": "accessors",
-  "version": "0.0.4",
-  "description": "Read and update (nested) objects using simple patterns.",
+  "name": "delver",
+  "version": "0.0.5",
+  "description": "Read and update nested objects using simple patterns.",
   "main": "index.js",
   "devDependencies": {
     "tape" : "~1.1.0"
@@ -11,6 +11,7 @@
   },
   "keywords": [
     "accessor",
+    "traversal",
     "pattern",
     "access",
     "object",
@@ -30,13 +31,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ttaubert/node-accessors.git"
+    "url": "git://github.com/andyburke/node-delver.git"
   },
-  "homepage": "https://github.com/ttaubert/node-accessors",
+  "homepage": "https://github.com/andyburke/node-delver",
   "author": {
-    "name": "Tim Taubert",
-    "email": "tim@timtaubert.de",
-    "url": "http://timtaubert.de/"
+    "name": "Andy Burke",
+    "email": "aburke@bitflood.org",
+    "url": "http://github.com/andyburke"
   },
+  "contributors": [
+    {
+      "name": "Tim Taubert",
+      "email": "tim@timtaubert.de",
+      "url": "http://timtaubert.de/"
+    }
+  ],
   "license": "MIT"
 }

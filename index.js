@@ -1,10 +1,22 @@
-// https://github.com/ttaubert/node-accessors
-// (c) 2013 Tim Taubert <tim@timtaubert.de>
-// accessors may be freely distributed under the MIT license.
+// https://github.com/andyburke/node-delver
+// delver may be freely distributed under the MIT license.
 
 "use strict";
 
-module.exports = Accessors;
+module.exports = Delver;
+
+function Delver( obj ) {
+    this.object = obj;
+    return this;
+}
+
+Delver.prototype.get = function( key, _default ) {
+    return Delver.get( this.object, key, _default );
+}
+
+Delver.prototype.set = function( key, value ) {
+    return Delver.set( this.object, key, value );
+}
 
 var isArray = Array.isArray || function(obj) {
     return Object.prototype.toString.call(obj) === '[object Array]';
@@ -12,141 +24,229 @@ var isArray = Array.isArray || function(obj) {
 
 var arraymatcher = /^(.*?)\[(\d+)?\]$/;
 
-function Accessors(obj) {
-  if (!(this instanceof Accessors)) {
-    return new Accessors(obj);
-  }
-
-  this.object = obj;
-  return this;
+function GetSubkey( parts, pos ) {
+    return parts.slice( 0, pos ).join( "." );
 }
 
-Accessors.prototype.get = function(key, def) {
-    return Accessors.get(this.object, key, def);
+/*******************************************************
+ * we need a lightweight 'accessor' because Javascript
+ * sadly does not support pointers to primitives. It would
+ * be much nicer if the traverser could return a pointer to
+ * the value you're trying to get/set.
+ *******************************************************/
+function Accessor( obj, key ) {
+    this.object = obj;
+    this.key = key;
 }
 
-Accessors.prototype.set = function(key, def) {
-    return Accessors.set(this.object, key, def);
+Accessor.prototype.get = function() {
+    return this.object[ this.key ];
 }
 
-Accessors.get = function (obj, key, def) {
-  if (typeof(obj) !== "object") {
-    throw new TypeError("Object to access must be an object.");
-  }
-  if (typeof(key) !== "string") {
-    throw new TypeError("Key to access must be a string.");
-  }
-  if (/(^\.|\.$|\.\.)/.test(key)) {
-    throw new Error("Given key is invalid.");
-  }
+Accessor.prototype.set = function( value ) {
+    return this.object[ this.key ] = value;
+}
 
-  var parts = key.split(".");
-
-  for (var i = 0; i < parts.length; i++) {
-    var part = parts[i];
-    if (/\[/.test(part)) {
-      var found = part.match(arraymatcher);
-      if (found.length != 3) {
-          throw new Error("Subkey '" + part + "' is not valid. (" + key + ")");
-      }
-      var name = found[1];
-      var index = found[2];
-      
-      if (name.length == 0) {
-          throw new Error("Subkey '" + part + "' is not a valid key, it must have a name in addition to an array subscript. (" + key + ")");
-      }
-      
-      if ( index === undefined ) {
-          throw new Error("You must specify an array index when using get(), subkey '" + part + "' is invalid. (" + key + ")" );
-      } else {
-          index = parseInt(index);
-      }
-
-      if (!obj.hasOwnProperty(name) || !isArray(obj[name])) {
-          return def;
-      }
-      if (index > obj[name].length - 1) {
-          return def;
-      }
-      obj = obj[name][index];
-      continue;
-    } else if (!obj.hasOwnProperty(part)) {
-      return def;
+function delve( options ) {
+    if ( typeof( options.object ) !== 'object' )
+    {
+        throw new TypeError( 'Object to access must be an object.' );
     }
-    obj = obj[part];
-  }
-
-  return obj;
-}
-
-Accessors.set = function (obj, key, val) {
-  if (typeof(obj) !== "object") {
-    throw new TypeError("Object to access must be an object.");
-  }
-  if (typeof(key) !== "string") {
-    throw new TypeError("Key to access must be a string.");
-  }
-  if (/(^\.|\.$|\.\.)/.test(key)) {
-    throw new Error("Given key is invalid.");
-  }
-
-  var parts = key.split(".");
-
-  for (var i = 0; i < parts.length; i++) {
-    var isKey = (i == (parts.length - 1));
-    var part = parts[i];
-    if (/\[/.test(part)) {
-      var found = part.match(arraymatcher);
-      if (found.length != 3) {
-          throw new Error("Subkey '" + part + "' is not a valid array accessor. (" + key + ")");
-      }
-      var name = found[1];
-      var index = found[2];
-      
-      if (name.length == 0) {
-          throw new Error("Subkey '" + part + "' is not a valid key, it must have a name in addition to an array subscript. (" + key + ")");
-      }
-      
-      if ( index === undefined ) {
-          index = (obj.hasOwnProperty(name) && isArray(obj[name])) ? obj[name].length : 0;
-      } else {
-          index = parseInt(index);
-      }
-
-      if (obj.hasOwnProperty(name)) {
-          if (!isArray(obj[name])) {
-              throw new Error("Subkey '" + part + "' is not valid because '" + name + "' is not an array. (" + key + ")");
-          } else if (index === undefined ) {
-              
-          } else if (index > obj[name].length - 1) {
-              var sizeNeeded = (index - obj[name].length) + 1;
-              obj[name] = obj[name].concat(new Array(sizeNeeded));
-              obj = obj[name][index] = isKey ? val : {};
-          } else {
-              if (isKey) {
-                  obj[name][index] = val;
-              } else {
-                  obj = obj[name][index];
-              }
-          }
-      } else {
-          obj[name] = new Array(index + 1);
-          obj = obj[name][index] = isKey ? val : {};
-      }
-      continue;
-    } else if (typeof(obj) !== "object" || isArray(obj)) {
-      var bt = parts.slice(0, i).join(".");
-      throw new Error("Part '" + bt + ".' of the given key is not an object.");
-    } else if (!obj.hasOwnProperty(part)) {
-      obj[part] = isKey ? val : {};
-      obj = obj[part];
-    } else {
-      if (isKey) {
-        obj[part] = val;
-      } else {
-        obj = obj[part];
-      }
+    
+    if ( typeof( options.key ) !== 'string' )
+    {
+        throw new TypeError( 'Key to access must be a string.' );
     }
-  }
+
+    var obj = options.object;
+    var parts = options.key.split( '.' );
+
+    for ( var i = 0; i < parts.length; ++i )
+    {
+        var isKey = ( i == ( parts.length - 1 ) );
+        var part = parts[ i ];
+
+        if ( typeof( part ) != 'string' || part.length == 0 )
+        {
+            throw new Error( 'Key is invalid: ' + options.key );
+        }
+        
+        var exists = options.strict ? obj.hasOwnProperty( part ) : typeof( obj[ part ] ) !== 'undefined';
+
+        if ( /\[/.test( part ) )
+        {
+            var found = part.match( arraymatcher );
+            if ( found.length != 3 )
+            {
+                throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not a valid array accessor. (" + options.key + ")" );
+            }
+
+            var name = found[ 1 ];
+            var index = found[ 2 ];
+            
+            if ( name.length == 0 )
+            {
+                throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not a valid key, it must have a name in addition to an array subscript. (" + options.key + ")" );
+            }
+
+            exists = options.strict ? obj.hasOwnProperty( name ) : typeof( obj[ name ] ) !== 'undefined';
+            
+            if ( index === undefined )
+            {
+                index = ( exists && isArray( obj[ name ] ) ) ? obj[ name ].length : 0;
+            }
+            else
+            {
+                index = parseInt( index );
+            }
+        
+            if ( exists )
+            {
+                if ( !isArray( obj[ name ] ) )
+                {
+                    throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not valid because '" + name + "' is not an array. (" + options.key + ")" );
+                }
+                else if ( index > obj[ name ].length - 1 )
+                {
+                    if ( !options.create )
+                    {
+                        if ( options.read )
+                        {
+                            return undefined;
+                        }
+
+                        throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not valid because index '" + index + "' is out of bounds and create is not enabled. (" + options.key + ")" );
+                    }
+                    
+                    var sizeNeeded = ( index - obj[ name ].length ) + 1;
+                    obj[ name ] = obj[ name ].concat( new Array( sizeNeeded ) );
+                    if ( isKey )
+                    {
+                        return new Accessor( obj[ name ], index );
+                    }
+                    else
+                    {
+                        obj = obj[ name ][ index ] = {};
+                    }
+                }
+                else
+                {
+                    if ( isKey )
+                    {
+                        return new Accessor( obj[ name ], index );
+                    }
+                    else
+                    {
+                        obj = obj[ name ][ index ];
+                    }
+                }
+            }
+            else if ( options.create )
+            {
+                obj[ name ] = new Array( index + 1 );
+                if ( isKey )
+                {
+                    return new Accessor( obj[ name ], index );
+                }
+                else
+                {
+                    obj = obj[ name ][ index ] = {};
+                }
+            }
+            else
+            {
+                throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not valid because it does not exist and create is not enabled. (" + options.key + ")" );
+            }
+
+            continue;
+        }
+        else if ( typeof( obj ) !== "object" )
+        {
+            throw new Error( "Part '" + GetSubkey( parts, i ) + ".' of the given key is not an object." );
+        }
+        else if ( isArray( obj ) )
+        {
+            throw new Error( "Part '" + GetSubkey( parts, i ) + ".' of the given key is an array, but has no index accessor ([])." );
+        }
+        else if ( !exists )
+        {
+            if ( isKey )
+            {
+                if ( options.read )
+                {
+                    return undefined;
+                }
+                
+                return new Accessor( obj, part );
+            }
+
+            if ( !options.create )
+            {
+                throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not valid because it does not exist and create is not enabled. (" + options.key + ")" );
+            }
+
+            obj = obj[ part ] = {};
+        }
+        else
+        {
+            if ( isKey )
+            {
+                return new Accessor( obj, part );
+            }
+            else
+            {
+                obj = obj[ part ];
+            }
+        }
+    }
+    
+    throw Error( 'Failed to resolve: ' + options.key );
 }
 
+Delver.get = function( obj, key, _default ) {
+    var strict = true;
+    
+    if ( typeof( key ) == 'undefined' )
+    {
+        key = obj.key;
+        strict = typeof( obj.strict ) !== 'undefined' ? obj.strict : strict;    
+        _default = obj._default;
+        obj = obj.object;
+    }
+    
+    var accessor = delve( {
+        read: true,
+        strict: strict,
+        object: obj,
+        key: key
+    } );
+    
+    if ( accessor == undefined )
+    {
+        return _default;
+    }
+    
+    return accessor.get();
+}
+
+Delver.set = function( obj, key, val, create ) {
+    var strict = true;
+    
+    if ( typeof( key ) == 'undefined' )
+    {
+        key = obj.key;
+        val = obj.value;
+        create = obj.create;
+        strict = typeof( obj.strict ) !== 'undefined' ? obj.strict : strict;    
+        obj = obj.object;
+    }
+
+    var accessor = delve( {
+        strict: strict,
+        create: typeof( create ) !== 'undefined' ? create : true,
+        object: obj,
+        key: key
+    } );
+    
+    return accessor.set( val );
+}

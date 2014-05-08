@@ -1,86 +1,94 @@
-# accessors
+# Delver
 
-Read and update (nested) objects using simple patterns.
-
-[![browser support](http://ci.testling.com/ttaubert/node-accessors.png)](http://ci.testling.com/ttaubert/node-accessors)
-
-[![build status](https://secure.travis-ci.org/ttaubert/node-accessors.png)](http://travis-ci.org/ttaubert/node-accessors)
+Read and update nested objects using simple patterns.
 
 # examples
 
 ## get
 
-    var Accessors = require("accessors");
+```javascript
+    var Delver = require( 'delver' );
 
-    var obj = {foo: {bar: "value", arr: [ 1, 2, 3 ]}};
-    var acc = Accessors(obj);
+    var obj = {
+        foo: {
+            bar: 'value',
+            arr: [ 1, 2, 3 ]
+        }
+    };
 
-    console.log(acc.get("foo.bar"));
-    console.log(acc.get("foo.bar2", "default"));
-    console.log(acc.get("foo.arr[1]"));
+    var delver = new Delver( obj );
 
-    // You don't actually need an Accessors instance.
-    console.log(Accessors.get(obj, "foo.bar"));
-    console.log(Accessors.get(obj, "foo.bar2"));
-    console.log(Accessors.get(obj, "foo.arr[1]"));
+    console.log( delver.get( 'foo.bar' ) );
+    console.log( delver.get( 'foo.bar2', 'default' ) );
+    console.log( delver.get( 'foo.arr[1]' ) );
+
+    // You don't actually need a Delver instance.
+    console.log( Delver.get( obj, 'foo.bar' ) );
+    console.log( Delver.get( obj, 'foo.bar2' ) );
+    console.log( Delver.get( obj, 'foo.arr[1]' ) );
+```
 
 output:
 
-    $ node examples/acc-get.js
+```
     value
     default
     2
     value
     undefined
     2
+```
 
 ## set
 
-    var Accessors = require("accessors");
+```javascript
+    var Delver = require( 'delver' );
 
     var obj = {};
-    var acc = Accessors(obj);
+    var delver = new Delver( obj );
 
-    acc.set("foo.bar", "value");
-    console.log(acc.get("foo.bar"));
+    delver.set( 'foo.bar', 'value' );
+    console.log( delver.get( 'foo.bar' ) );
 
-    acc.set("foo.baz[]", "value1");
-    acc.set("foo.baz[]", "value2");
+    delver.set( 'foo.baz[]', 'value1' );
+    delver.set( 'foo.baz[]', 'value2' );
 
-    // You don't actually need an Accessors instance.
-    Accessors.set(obj, "foo.baz[]", "value3");
+    // You don't actually need a Delver instance.
+    Delver.set( obj, 'foo.baz[]', 'value3' );
 
-    console.log(acc.get("foo.baz"));
+    console.log( delver.get( 'foo.baz' ) );
+```
 
 output:
 
-    $ node examples/acc-set.js
+```
     value
     [ 'value1', 'value2', 'value3' ]
+```
 
 # methods
 
-Accessors(object)
+new Devler( object )
 -----------------
 
-Creates an Accessor instance with an object to operate on.
+Creates a Delver instance with an object to operate on.
 
-.get(key, defaultValue)
+.get( key, defaultValue )
 -----------------------
 
 Returns the internal object's value at the given `key` if found, else returns `defaultValue`.
 
-.set(key, value)
+.set( key, value )
 ----------------
 
 Sets the internal object's value to `value` at the given `key` and overrides it if it already exists.
 
-Accessors.get(object, key, defaultValue)
+Delver.get( object, key, defaultValue )
 ----------------------------------------
 
 Returns the given `object`'s value at the given `key` if found, else returns `defaultValue`.
 
-Accessors.set(object, key, value)
+Delver.set( object, key, value )
 ---------------------------------
 
 Sets the given `object`'s value to `value` at the given `key` and overrides it if it already exists.
@@ -90,7 +98,7 @@ Sets the given `object`'s value to `value` at the given `key` and overrides it i
 With [npm](https://npmjs.org) do:
 
 ```
-npm install accessors
+npm install delver
 ```
 
 # license
@@ -98,6 +106,12 @@ npm install accessors
 MIT
 
 # changelog
+
+0.0.5
+-----
+* Rename to Delver
+* Refactor get/set to use a single traversal method
+* Allow for strict/unstrict access (respects/doesn't respect hasOwnProperty)
 
 0.0.4
 -----
