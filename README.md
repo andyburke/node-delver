@@ -66,6 +66,78 @@ value
 [ 'value1', 'value2', 'value3' ]
 ```
 
+# Why would I need this?
+
+One example is to allow for more succinct REST requests.
+
+Let's say you have an object of type 'foo' with id '123'. It looks like this:
+
+```
+{
+    "name": "bloop",
+    "media": {
+        "photos": [
+            {
+                "url": "http://somewhere.com/images/turtle.jpg",
+                "preview": "http://somewhere.com/images/turtle-preview.jpg",
+                "width": 50,
+                "height": 50
+            },
+            {
+                "url": "http://somewhere.com/images/snake.jpg",
+                "preview": "http://somewhere.com/images/snake-preview.jpg",
+                "width": 50,
+                "height": 50
+            }
+        ]
+    }
+}
+```
+
+Now, let's say you want to update the width of the snake picture to be 100 instead of 50.
+Because your server-side setup doesn't allow dot notation access, maybe you need to send
+back the entire array of photos with the new updated value:
+
+```
+curl http://somewhere.com/foo/123
+  -X PUT
+  -H 'Content-Type: application/json'
+  -H 'Accept: application/json'
+  --data-binary '{
+    "media": {
+        "photos": [
+            {
+                "url": "http://somewhere.com/images/turtle.jpg",
+                "preview": "http://somewhere.com/images/turtle-preview.jpg",
+                "width": 50,
+                "height": 50
+            },
+            {
+                "url": "http://somewhere.com/images/snake.jpg",
+                "preview": "http://somewhere.com/images/snake-preview.jpg",
+                "width": 100,
+                "height": 50
+            }
+        ]
+    }
+  }'
+```
+
+But with Delver on the server, you could send:
+
+```
+curl http://somewhere.com/foo/123
+  -X PUT
+  -H 'Content-Type: application/json'
+  -H 'Accept: application/json'
+  --data-binary '{
+    "media.photos[1].width": 100
+  }'
+```
+
+And then in your node.js server, Delver will let you find the appropriate field in
+the 'foo' object and update it directly.
+
 # Methods
 
 new Devler( object )
