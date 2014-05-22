@@ -93,6 +93,11 @@ function delve( options ) {
             
             if ( index === undefined )
             {
+                if ( options.read )
+                {
+                    throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not a valid key, it must have a valid array index when reading. (" + options.key + ")" );
+                }
+                
                 index = ( exists && isArray( obj[ name ] ) ) ? obj[ name ].length : 0;
             }
             else
@@ -155,7 +160,14 @@ function delve( options ) {
             }
             else
             {
-                throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not valid because it does not exist and create is not enabled. (" + options.key + ")" );
+                if ( options.read )
+                {
+                    return undefined;
+                }
+                else
+                {
+                    throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not valid because it does not exist and create is not enabled. (" + options.key + ")" );
+                }
             }
 
             continue;
@@ -180,11 +192,16 @@ function delve( options ) {
                 return new Accessor( obj, part );
             }
 
+            if ( options.read )
+            {
+                return undefined;
+            }
+            
             if ( !options.create )
             {
                 throw new Error( "Subkey '" + GetSubkey( parts, i ) + "' is not valid because it does not exist and create is not enabled. (" + options.key + ")" );
             }
-
+            
             obj = obj[ part ] = {};
         }
         else

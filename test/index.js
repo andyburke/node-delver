@@ -40,6 +40,7 @@ test( 'get', function ( t ) {
         }
     };
     t.equal( delver.get( obj, 'foo.bar.baz2', 'fallback' ), 'fallback' );
+    t.equal( delver.get( obj, 'foo.bar2.baz2', 'fallback' ), 'fallback' );
 
     obj = {
         foo: {

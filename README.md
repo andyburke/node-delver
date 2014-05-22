@@ -185,6 +185,10 @@ MIT
 
 # Changelog
 
+0.0.6
+-----
+* Fix some issues when reading from nonexistent items
+
 0.0.5
 -----
 * Rename to Delver
