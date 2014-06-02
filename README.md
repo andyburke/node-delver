@@ -185,6 +185,10 @@ MIT
 
 # Changelog
 
+0.0.7
+-----
+* Allow specifying a constructor to use
+
 0.0.6
 -----
 * Fix some issues when reading from nonexistent items

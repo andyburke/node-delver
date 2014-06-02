@@ -249,12 +249,14 @@ Delver.get = function( obj, key, _default ) {
 Delver.set = function( obj, key, val, create ) {
     var strict = true;
     
+    var _constructor = null;
     if ( typeof( key ) == 'undefined' )
     {
         key = obj.key;
         val = obj.value;
         create = obj.create;
         strict = typeof( obj.strict ) !== 'undefined' ? obj.strict : strict;    
+        _constructor = obj._constructor;
         obj = obj.object;
     }
 
@@ -265,5 +267,5 @@ Delver.set = function( obj, key, val, create ) {
         key: key
     } );
     
-    return accessor.set( val );
+    return accessor.set( _constructor ? _constructor( val ) : val );
 }
