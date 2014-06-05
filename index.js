@@ -124,7 +124,20 @@ function delve( options ) {
                     }
                     
                     var sizeNeeded = ( index - obj[ name ].length ) + 1;
-                    obj[ name ] = obj[ name ].concat( new Array( sizeNeeded ) );
+                    
+                    // special case for pushing one item since some libraries override push
+                    if ( sizeNeeded == 1 )
+                    {
+                        // if this is the key, we push the value; however, the value will get overwritten
+                        // by the accessor after the callback. we push the value because some libraries
+                        // expect the value to be of a certain type and pushing null may cause issues
+                        obj[ name ].push( isKey ? options.value : null );
+                    }
+                    else
+                    {
+                        obj[ name ] = obj[ name ].concat( new Array( sizeNeeded ) );
+                    }
+
                     if ( isKey )
                     {
                         return new Accessor( obj[ name ], index );
@@ -235,7 +248,8 @@ Delver.get = function( obj, key, _default ) {
         read: true,
         strict: strict,
         object: obj,
-        key: key
+        key: key,
+        value: val
     } );
     
     if ( accessor == undefined )
@@ -264,7 +278,8 @@ Delver.set = function( obj, key, val, create ) {
         strict: strict,
         create: typeof( create ) !== 'undefined' ? create : true,
         object: obj,
-        key: key
+        key: key,
+        value: val
     } );
     
     return accessor.set( _constructor ? _constructor( val ) : val );

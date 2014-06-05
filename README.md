@@ -185,6 +185,11 @@ MIT
 
 # Changelog
 
+0.0.8
+-----
+* Special-case adding a single item to an array to help with some specific cases where .push() is
+  preferred to using concat
+
 0.0.7
 -----
 * Allow specifying a constructor to use
