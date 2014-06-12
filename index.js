@@ -248,8 +248,7 @@ Delver.get = function( obj, key, _default ) {
         read: true,
         strict: strict,
         object: obj,
-        key: key,
-        value: val
+        key: key
     } );
     
     if ( accessor == undefined )

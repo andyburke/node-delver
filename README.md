@@ -185,6 +185,10 @@ MIT
 
 # Changelog
 
+0.0.9
+-----
+* Fix a silly bug in .get
+
 0.0.8
 -----
 * Special-case adding a single item to an array to help with some specific cases where .push() is
