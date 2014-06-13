@@ -6,16 +6,19 @@
 module.exports = Delver;
 
 function Delver( obj ) {
-    this.object = obj;
+    this._object = obj;
     return this;
 }
 
 Delver.prototype.get = function( key, _default ) {
-    return Delver.get( this.object, key, _default );
+    if ( !key ) {
+        return this._object;
+    }
+    return Delver.get( this._object, key, _default );
 }
 
 Delver.prototype.set = function( key, value ) {
-    return Delver.set( this.object, key, value );
+    return Delver.set( this._object, key, value );
 }
 
 var isArray = Array.isArray || function(obj) {
@@ -35,16 +38,16 @@ function GetSubkey( parts, pos ) {
  * the value you're trying to get/set.
  *******************************************************/
 function Accessor( obj, key ) {
-    this.object = obj;
-    this.key = key;
+    this._object = obj;
+    this._key = key;
 }
 
 Accessor.prototype.get = function() {
-    return this.object[ this.key ];
+    return this._object[ this._key ];
 }
 
 Accessor.prototype.set = function( value ) {
-    return this.object[ this.key ] = value;
+    return this._object[ this._key ] = value;
 }
 
 function delve( options ) {
