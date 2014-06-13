@@ -1,6 +1,6 @@
 {
   "name": "delver",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "repo": "andyburke/node-delver",
   "author": {
     "name": "Andy Burke",
@@ -12,6 +12,10 @@
       "name": "Tim Taubert",
       "email": "tim@timtaubert.de",
       "url": "http://timtaubert.de/"
+    },
+    {
+      "name": "Jacob Lowe",
+      "url": "https://github.com/jacoblwe20"
     }
   ],
   "homepage": "https://github.com/andyburke/node-delver",

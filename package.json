@@ -1,6 +1,6 @@
 {
   "name": "delver",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Read and update nested objects using simple patterns.",
   "main": "index.js",
   "devDependencies": {
@@ -44,6 +44,10 @@
       "name": "Tim Taubert",
       "email": "tim@timtaubert.de",
       "url": "http://timtaubert.de/"
+    },
+    {
+      "name": "Jacob Lowe",
+      "url": "https://github.com/jacoblwe20"
     }
   ],
   "license": "MIT"

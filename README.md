@@ -150,12 +150,14 @@ Creates a Delver instance with an object to operate on.
 
 Returns the internal object's value at the given `key` if found, else returns `defaultValue`.
 
+If called with no arguments, will return the bare internal object.
+
 .set( key, value )
 ----------------
 
 Sets the internal object's value to `value` at the given `key` and overrides it if it already exists.
 
-Delver.get( object, key, defaultValue )
+Delver.get( object, key, defaultValue] )
 ----------------------------------------
 
 Returns the given `object`'s value at the given `key` if found, else returns `defaultValue`.
@@ -184,6 +186,11 @@ component install andyburke/node-delver
 MIT
 
 # Changelog
+
+0.0.10
+-----
+* Add ability to get internal object via .get() with no arguments
+* Fix up jshint warnings
 
 0.0.9
 -----
@@ -223,12 +230,12 @@ thanks to him for a great little library.
 
 Delver was created to enable a couple of additional features:
   * array level element access, eg:
-  
+
   ```javascript
       Delver.get( obj, 'foo.bar[3]' ); // get element with index 3 of array 'bar'
       Delver.set( obj, 'foo.bar[4].baz', 'yak' ); // set field 'baz' of element with index 4 of array 'bar'
   ```
-  
+
   * allow for a less strict traversal of objects
     * specifically, I needed to support [mongoose](http://mongoosejs.com/) objects which have accessors instead of hasOwnProperty()-checkable members
   * add ability to enable/disable automatic path creation
