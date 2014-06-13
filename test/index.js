@@ -77,6 +77,14 @@ test( 'get', function ( t ) {
         _default: 'yak'
     } ), 'yak' );
 
+    var delverInstance = new delver({ 
+      foo : 'baz',
+      bar : 'qux'
+    });
+    t.equal('object', typeof delverInstance.get());
+    t.equal( delverInstance.get().foo, 'baz' );
+    t.equal( delverInstance.get().bar, 'qux' );
+
     t.throws( function () {
         delver.get( 'string', 'key' );
     } );
