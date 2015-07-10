@@ -3,17 +3,19 @@
 var test = require( 'tape' );
 var delver = require( '../' );
 
-test( 'get', function ( t ) {
-    var obj = null;
-    
-    obj = {
+test( 'get single value', function( t ) {
+    var obj = {
         foo: {
             bar: 'value'
         }
     };
     t.equal( delver.get( obj, 'foo.bar' ), 'value' );
 
-    obj = {
+    t.end();
+} );
+
+test( 'get nonexistent value', function( t ) {
+    var obj = {
         foo: {
             bar: {
                 baz: 'value'
@@ -23,7 +25,25 @@ test( 'get', function ( t ) {
     t.equal( delver.get( obj, 'foo.bar.baz' ), 'value' );
     t.equal( delver.get( obj, 'foo.bar.baz2' ), void 0 );
 
-    obj = {
+    t.end();
+} );
+
+test( 'get nonexistent deep value', function( t ) {
+    var obj = {
+        foo: {
+            bar: {
+                baz: 'value'
+            }
+        }
+    };
+    t.equal( delver.get( obj, 'foo.bar.baz' ), 'value' );
+    t.equal( delver.get( obj, 'foo.bar2.baz2' ), void 0 );
+
+    t.end();
+} );
+
+test( 'get existing with fallback', function( t ) {
+    var obj = {
         foo: {
             bar: {
                 baz: void 0
@@ -32,7 +52,11 @@ test( 'get', function ( t ) {
     };
     t.equal( delver.get( obj, 'foo.bar.baz', 'fallback' ), void 0 );
 
-    obj = {
+    t.end();
+} );
+
+test( 'get fallback value', function( t ) {
+    var obj = {
         foo: {
             bar: {
                 baz: 'value'
@@ -42,7 +66,11 @@ test( 'get', function ( t ) {
     t.equal( delver.get( obj, 'foo.bar.baz2', 'fallback' ), 'fallback' );
     t.equal( delver.get( obj, 'foo.bar2.baz2', 'fallback' ), 'fallback' );
 
-    obj = {
+    t.end();
+} );
+
+test( 'get from array', function( t ) {
+    var obj = {
         foo: {
             bar: [ 1, 2, 3 ]
         }
@@ -50,19 +78,27 @@ test( 'get', function ( t ) {
     t.equal( delver.get( obj, 'foo.bar[1]', 2 ), 2 );
     t.equal( delver.get( obj, 'foo.bar[100]', 'fallback' ), 'fallback' );
 
-    obj = {
+    t.end();
+} );
+
+test( 'get fallback value when accessing object', function( t ) {
+    var obj = {
         foo: {}
     };
     t.equal( delver.get( obj, 'foo.bar', 'fallback' ), 'fallback' );
-    t.equal( delver.get( obj, 'foo.bar', 'fallback' ), 'fallback' );
 
-    function TestObj() {};
-    TestObj.prototype.baz = 'yak';
-    obj = {
+    t.end();
+} );
+
+function TestObj() {}
+TestObj.prototype.baz = 'yak';
+
+test( 'get from prototype', function( t ) {
+    var obj = {
         foo: {
             bar: new TestObj()
         }
-    }
+    };
 
     t.equal( delver.get( {
         object: obj,
@@ -77,163 +113,208 @@ test( 'get', function ( t ) {
         _default: 'yak'
     } ), 'yak' );
 
-    var delverInstance = new delver({ 
-      foo : 'baz',
-      bar : 'qux'
-    });
-    t.equal('object', typeof delverInstance.get());
-    t.equal( delverInstance.get().foo, 'baz' );
-    t.equal( delverInstance.get().bar, 'qux' );
-
-    t.throws( function () {
-        delver.get( 'string', 'key' );
-    } );
-
-    t.throws(function () {
-      delver.get( {}, { split: function () {return [] } } );
-    } );
-
-    t.throws(function () {
-        delver.get( {}, '.' );
-    } );
-    
-    t.throws(function () {
-        delver.get( {}, '.foo.bar' );
-    } );
-    
-    t.throws(function () {
-        delver.get( { foo: { bar: {} } }, 'foo.bar.' );
-    } );
-    
-    t.throws(function () {
-        delver.get( {}, '.foo..bar' );
-    } );
-    
-    t.throws(function () {
-        delver.get( {}, '.foo...bar' );
-    } );
-    
-    t.throws(function () {
-        delver.get( {}, 'foo[]' );
-    } );
-    
-    t.throws(function () {
-        delver.get( {}, 'foo[bar]' );
-    } );
-    
     t.end();
 } );
 
-test('set', function (t) {
-  var obj = {};
+test( 'test delver instance', function( t ) {
+    var delverInstance = new delver( {
+        foo: 'baz',
+        bar: 'qux'
+    } );
+    t.equal( 'object', typeof delverInstance.get() );
+    t.equal( delverInstance.get().foo, 'baz' );
+    t.equal( delverInstance.get().bar, 'qux' );
 
-  delver.set( obj, 'foobar', 'value' );
-  t.equal( obj.foobar, 'value' );
+    t.throws( function() {
+        delver.get( 'string', 'key' );
+    } );
 
-  delver.set( obj, 'foo.bar', 'value' );
-  t.equal( obj.foo.bar, 'value' );
+    t.throws( function() {
+        delver.get( {}, {
+            split: function() {
+                return [];
+            }
+        } );
+    } );
 
-  delver.set( obj, 'foo.bar', 'value2' );
-  t.equal( obj.foo.bar, 'value2' );
+    t.throws( function() {
+        delver.get( {}, '.' );
+    } );
 
-  delver.set( obj, 'a[]', 'value1' );
-  delver.set( obj, 'a[]', 'value2' );
-  t.deepEqual( obj.a, [ 'value1', 'value2' ] );
+    t.throws( function() {
+        delver.get( {}, '.foo.bar' );
+    } );
 
-  delver.set( obj, 'foo.baz[]', 'value1' );
-  delver.set( obj, 'foo.baz[]', 'value2' );
-  t.deepEqual( obj.foo.baz, [ 'value1', 'value2' ] );
+    t.throws( function() {
+        delver.get( {
+            foo: {
+                bar: {}
+            }
+        }, 'foo.bar.' );
+    } );
 
-  delver.set( obj.foo, 'baz[]', 'value3' );
-  t.deepEqual( obj.foo.baz, [ 'value1', 'value2', 'value3' ] );
+    t.throws( function() {
+        delver.get( {}, '.foo..bar' );
+    } );
 
-  delver.set( obj.foo, 'boo[]', 'value1' );
-  delver.set( obj.foo, 'boo[]', 'value2' );
-  delver.set( obj.foo, 'boo[]', 'value3' );
-  t.deepEqual( obj.foo.boo, [ 'value1', 'value2', 'value3' ] );
-  
-  delver.set( obj.foo, 'boo[1]', 'fooboo' );
-  t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3' ] );
+    t.throws( function() {
+        delver.get( {}, '.foo...bar' );
+    } );
 
-  delver.set( obj.foo, 'boo[]', 'another' );
-  t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another' ] );
+    t.throws( function() {
+        delver.get( {}, 'foo[]' );
+    } );
 
-  delver.set( obj, 'foo.boo[]', 'yetanother' );
-  t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another', 'yetanother' ] );
+    t.throws( function() {
+        delver.get( {}, 'foo[bar]' );
+    } );
 
-  delver.set( obj, 'foo.boo[].yak', 'yes' );
-  t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another', 'yetanother', { yak: 'yes' } ] );
+    t.end();
+} );
 
-  delver.set( obj, 'foo.boo[5].yak', 'no' );
-  t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another', 'yetanother', { yak: 'no' } ] );
-  
-  t.throws(function () {
-    delver.set( 'string', 'key', 'value' );
-  } );
+test( 'simple set', function( t ) {
+    var obj = {};
 
-  t.throws(function () {
-    delver.set( {}, { split: function () { return [] } }, 'value' );
-  } );
+    delver.set( obj, 'foobar', 'value' );
+    t.equal( obj.foobar, 'value' );
+    t.end();
+} );
 
-  t.throws(function () {
-    delver.set( {}, '.', 'value' );
-  } );
+test( 'recursive object set', function( t ) {
+    var obj = {};
 
-  t.throws(function () {
-    delver.set( {}, '.foo.bar', 'value' );
-  } );
+    delver.set( obj, 'foo.bar', 'value' );
+    t.equal( obj.foo.bar, 'value' );
 
-  t.throws(function () {
-    delver.set( {}, 'foo.bar.', 'value' );
-  } );
+    delver.set( obj, 'foo.bar', 'value2' );
+    t.equal( obj.foo.bar, 'value2' );
 
-  t.throws(function () {
-    delver.set( {}, '.foo..bar', 'value' );
-  } );
+    t.end();
+} );
 
-  t.throws(function () {
-    delver.set( {}, '.foo...bar', 'value' );
-  } );
+test( 'set array', function( t ) {
+    var obj = {};
 
-  t.throws(function () {
-    delver.set( {}, '[]', 'value' );
-  } );
+    delver.set( obj, 'a[]', 'value1' );
+    delver.set( obj, 'a[]', 'value2' );
+    t.deepEqual( obj.a, [ 'value1', 'value2' ] );
+    t.end();
+} );
 
-  t.throws(function () {
-    delver.set( {}, '.[]', 'value' );
-  } );
+test( 'set array in object (recursive)', function( t ) {
+    var obj = {};
+    delver.set( obj, 'foo.baz[]', 'value1' );
+    delver.set( obj, 'foo.baz[]', 'value2' );
+    t.deepEqual( obj.foo.baz, [ 'value1', 'value2' ] );
 
-  t.throws(function () {
-    delver.set( {}, '[]test', 'value' );
-  } );
+    delver.set( obj.foo, 'baz[]', 'value3' );
+    t.deepEqual( obj.foo.baz, [ 'value1', 'value2', 'value3' ] );
 
-  t.throws(function () {
-    delver.set( {}, '[test]', 'value' );
-  } );
+    delver.set( obj.foo, 'boo[]', 'value1' );
+    delver.set( obj.foo, 'boo[]', 'value2' );
+    delver.set( obj.foo, 'boo[]', 'value3' );
+    t.deepEqual( obj.foo.boo, [ 'value1', 'value2', 'value3' ] );
 
-  t.throws(function () {
-    delver.set( {}, 'foo[bar]', 'value' );
-  } );
+    delver.set( obj.foo, 'boo[1]', 'fooboo' );
+    t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3' ] );
 
-  t.throws(function () {
-    delver.set( {}, 'foo.bar.[]', 'value' );
-  } );
+    delver.set( obj.foo, 'boo[]', 'another' );
+    t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another' ] );
 
-  t.throws(function () {
-    delver.set( {}, 'foo.bar..[]', 'value' );
-  } );
+    delver.set( obj, 'foo.boo[]', 'yetanother' );
+    t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another', 'yetanother' ] );
 
-  t.throws(function () {
-    delver.set( { foo: true }, 'foo[]', 'value' );
-  } );
+    delver.set( obj, 'foo.boo[].yak', 'yes' );
+    t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another', 'yetanother', {
+        yak: 'yes'
+    } ] );
 
-  t.throws(function () {
-    delver.set( { foo: true }, 'foo.bar', 'value' );
-  } );
+    delver.set( obj, 'foo.boo[5].yak', 'no' );
+    t.deepEqual( obj.foo.boo, [ 'value1', 'fooboo', 'value3', 'another', 'yetanother', {
+        yak: 'no'
+    } ] );
 
-  t.throws(function () {
-    delver.set( { foo: [] }, 'foo.bar', 'value' );
-  } );
+    t.end();
+} );
 
-  t.end();
+test( 'correct error conditions', function( t ) {
+    t.throws( function() {
+        delver.set( 'string', 'key', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, {
+            split: function() {
+                return [];
+            }
+        }, 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '.', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '.foo.bar', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, 'foo.bar.', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '.foo..bar', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '.foo...bar', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '[]', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '.[]', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '[]test', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, '[test]', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, 'foo[bar]', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, 'foo.bar.[]', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {}, 'foo.bar..[]', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {
+            foo: true
+        }, 'foo[]', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {
+            foo: true
+        }, 'foo.bar', 'value' );
+    } );
+
+    t.throws( function() {
+        delver.set( {
+            foo: []
+        }, 'foo.bar', 'value' );
+    } );
+
+    t.end();
 } );

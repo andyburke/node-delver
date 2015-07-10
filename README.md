@@ -187,6 +187,11 @@ MIT
 
 # Changelog
 
+0.0.11
+------
+* Cleanups, adding in .jshint (not everything yet passes) and .jsbeautifier settings
+* Some more tests for broken deep link chains
+
 0.0.10
 -----
 * Add ability to get internal object via .get() with no arguments
