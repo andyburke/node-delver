@@ -1,6 +1,6 @@
 {
   "name": "delver",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Read and update nested objects using simple patterns.",
   "main": "index.js",
   "devDependencies": {

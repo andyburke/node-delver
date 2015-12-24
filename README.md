@@ -140,7 +140,7 @@ the 'foo' object and update it directly.
 
 # Methods
 
-new Devler( object )
+new Delver( object )
 -----------------
 
 Creates a Delver instance with an object to operate on.
