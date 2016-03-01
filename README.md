@@ -187,6 +187,11 @@ MIT
 
 # Changelog
 
+1.0.0
+-----
+* ES6
+* remove component.json
+
 0.0.11
 ------
 * Cleanups, adding in .jshint (not everything yet passes) and .jsbeautifier settings

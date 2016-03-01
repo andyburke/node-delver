@@ -1,10 +1,10 @@
 'use strict';
 
-var test = require( 'tape' );
-var delver = require( '../' );
+const test = require( 'tape' );
+const delver = require( '../' );
 
 test( 'get single value', function( t ) {
-    var obj = {
+    let obj = {
         foo: {
             bar: 'value'
         }
@@ -15,7 +15,7 @@ test( 'get single value', function( t ) {
 } );
 
 test( 'get nonexistent value', function( t ) {
-    var obj = {
+    let obj = {
         foo: {
             bar: {
                 baz: 'value'
@@ -29,7 +29,7 @@ test( 'get nonexistent value', function( t ) {
 } );
 
 test( 'get nonexistent deep value', function( t ) {
-    var obj = {
+    let obj = {
         foo: {
             bar: {
                 baz: 'value'
@@ -43,7 +43,7 @@ test( 'get nonexistent deep value', function( t ) {
 } );
 
 test( 'get existing with fallback', function( t ) {
-    var obj = {
+    let obj = {
         foo: {
             bar: {
                 baz: void 0
@@ -56,7 +56,7 @@ test( 'get existing with fallback', function( t ) {
 } );
 
 test( 'get fallback value', function( t ) {
-    var obj = {
+    let obj = {
         foo: {
             bar: {
                 baz: 'value'
@@ -70,7 +70,7 @@ test( 'get fallback value', function( t ) {
 } );
 
 test( 'get from array', function( t ) {
-    var obj = {
+    let obj = {
         foo: {
             bar: [ 1, 2, 3 ]
         }
@@ -82,7 +82,7 @@ test( 'get from array', function( t ) {
 } );
 
 test( 'get fallback value when accessing object', function( t ) {
-    var obj = {
+    let obj = {
         foo: {}
     };
     t.equal( delver.get( obj, 'foo.bar', 'fallback' ), 'fallback' );
@@ -94,7 +94,7 @@ function TestObj() {}
 TestObj.prototype.baz = 'yak';
 
 test( 'get from prototype', function( t ) {
-    var obj = {
+    let obj = {
         foo: {
             bar: new TestObj()
         }
@@ -117,7 +117,7 @@ test( 'get from prototype', function( t ) {
 } );
 
 test( 'test delver instance', function( t ) {
-    var delverInstance = new delver( {
+    let delverInstance = new delver( {
         foo: 'baz',
         bar: 'qux'
     } );
@@ -173,7 +173,7 @@ test( 'test delver instance', function( t ) {
 } );
 
 test( 'simple set', function( t ) {
-    var obj = {};
+    let obj = {};
 
     delver.set( obj, 'foobar', 'value' );
     t.equal( obj.foobar, 'value' );
@@ -181,7 +181,7 @@ test( 'simple set', function( t ) {
 } );
 
 test( 'recursive object set', function( t ) {
-    var obj = {};
+    let obj = {};
 
     delver.set( obj, 'foo.bar', 'value' );
     t.equal( obj.foo.bar, 'value' );
@@ -193,7 +193,7 @@ test( 'recursive object set', function( t ) {
 } );
 
 test( 'set array', function( t ) {
-    var obj = {};
+    let obj = {};
 
     delver.set( obj, 'a[]', 'value1' );
     delver.set( obj, 'a[]', 'value2' );
@@ -202,7 +202,7 @@ test( 'set array', function( t ) {
 } );
 
 test( 'set array in object (recursive)', function( t ) {
-    var obj = {};
+    let obj = {};
     delver.set( obj, 'foo.baz[]', 'value1' );
     delver.set( obj, 'foo.baz[]', 'value2' );
     t.deepEqual( obj.foo.baz, [ 'value1', 'value2' ] );

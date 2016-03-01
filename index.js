@@ -1,5 +1,3 @@
-// https://github.com/andyburke/node-delver
-// delver may be freely distributed under the MIT license.
 'use strict';
 
 module.exports = Delver;
@@ -20,11 +18,11 @@ Delver.prototype.set = function( key, value ) {
     return Delver.set( this._object, key, value );
 };
 
-var isArray = Array.isArray || function( obj ) {
+const isArray = Array.isArray || function( obj ) {
     return Object.prototype.toString.call( obj ) === '[object Array]';
 };
 
-var arraymatcher = /^(.*?)\[(\d+)?\]$/;
+const arraymatcher = /^(.*?)\[(\d+)?\]$/;
 
 function getSubkey( parts, pos ) {
     return parts.slice( 0, pos ).join( '.' );
@@ -59,18 +57,18 @@ function delve( options ) {
         throw new TypeError( 'Key to access must be a string.' );
     }
 
-    var obj = options.object;
-    var parts = options.key.split( '.' );
+    let obj = options.object;
+    const parts = options.key.split( '.' );
 
-    for ( var i = 0; i < parts.length; ++i ) {
-        var isKey = i === parts.length - 1;
-        var part = parts[ i ];
+    for ( let i = 0; i < parts.length; ++i ) {
+        const isKey = i === parts.length - 1;
+        const part = parts[ i ];
 
         if ( typeof part !== 'string' || part.length === 0 ) {
             throw new Error( 'Key is invalid: ' + options.key );
         }
 
-        var exists = options.strict ? obj.hasOwnProperty( part ) : typeof obj[ part ] !== 'undefined';
+        let exists = options.strict ? obj.hasOwnProperty( part ) : typeof obj[ part ] !== 'undefined';
 
         // if we are not strict and this key part does not exist, stop and return undefined
         // if ( !exists && !options.strict ) {
@@ -78,13 +76,13 @@ function delve( options ) {
         // }
 
         if ( /\[/.test( part ) ) {
-            var found = part.match( arraymatcher );
-            if ( found.length != 3 ) {
+            const found = part.match( arraymatcher );
+            if ( found.length !== 3 ) {
                 throw new Error( 'Subkey \'' + getSubkey( parts, i ) + '\' is not a valid array accessor. (' + options.key + ')' );
             }
 
-            var name = found[ 1 ];
-            var index = found[ 2 ];
+            const name = found[ 1 ];
+            let index = found[ 2 ];
 
             if ( name.length === 0 ) {
                 throw new Error( 'Subkey \'' + getSubkey( parts, i ) + '\' is not a valid key, it must have a name in addition to an array subscript. (' + options.key + ')' );
@@ -116,10 +114,10 @@ function delve( options ) {
                         throw new Error( 'Subkey \'' + getSubkey( parts, i ) + '\' is not valid because index \'' + index + '\' is out of bounds and create is not enabled. (' + options.key + ')' );
                     }
 
-                    var sizeNeeded = index - obj[ name ].length + 1;
+                    const sizeNeeded = index - obj[ name ].length + 1;
 
                     // special case for pushing one item since some libraries override push
-                    if ( sizeNeeded == 1 ) {
+                    if ( sizeNeeded === 1 ) {
                         // if this is the key, we push the value; however, the value will get overwritten
                         // by the accessor after the callback. we push the value because some libraries
                         // expect the value to be of a certain type and pushing null may cause issues
@@ -204,16 +202,16 @@ function delve( options ) {
 }
 
 Delver.get = function( obj, key, _default ) {
-    var strict = true;
+    let strict = true;
 
-    if ( typeof key == 'undefined' ) {
+    if ( typeof key === 'undefined' ) {
         key = obj.key;
         strict = typeof obj.strict !== 'undefined' ? obj.strict : strict;
         _default = obj._default;
         obj = obj.object;
     }
 
-    var accessor = delve( {
+    let accessor = delve( {
         read: true,
         strict: strict,
         object: obj,
@@ -228,10 +226,10 @@ Delver.get = function( obj, key, _default ) {
 };
 
 Delver.set = function( obj, key, val, create ) {
-    var strict = true;
+    let strict = true;
 
-    var _constructor = null;
-    if ( typeof key == 'undefined' ) {
+    let _constructor = null;
+    if ( typeof key === 'undefined' ) {
         key = obj.key;
         val = obj.value;
         create = obj.create;
@@ -240,7 +238,7 @@ Delver.set = function( obj, key, val, create ) {
         obj = obj.object;
     }
 
-    var accessor = delve( {
+    let accessor = delve( {
         strict: strict,
         create: typeof create !== 'undefined' ? create : true,
         object: obj,
