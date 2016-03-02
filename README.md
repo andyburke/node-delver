@@ -7,16 +7,16 @@ Read and update nested objects using simple patterns.
 ## get
 
 ```javascript
-var Delver = require( 'delver' );
+const Delver = require( 'delver' );
 
-var obj = {
+let obj = {
     foo: {
         bar: 'value',
         arr: [ 1, 2, 3 ]
     }
 };
 
-var delver = new Delver( obj );
+let delver = new Delver( obj );
 
 console.log( delver.get( 'foo.bar' ) );
 console.log( delver.get( 'foo.bar2', 'default' ) );
@@ -42,10 +42,10 @@ undefined
 ## set
 
 ```javascript
-var Delver = require( 'delver' );
+const Delver = require( 'delver' );
 
-var obj = {};
-var delver = new Delver( obj );
+let obj = {};
+let delver = new Delver( obj );
 
 delver.set( 'foo.bar', 'value' );
 console.log( delver.get( 'foo.bar' ) );
@@ -175,12 +175,6 @@ With [npm](https://npmjs.org) do:
 npm install delver
 ```
 
-For [component](http://component.io) do:
-
-```
-component install andyburke/node-delver
-```
-
 # License
 
 MIT
@@ -190,7 +184,7 @@ MIT
 1.0.0
 -----
 * ES6
-* remove component.json
+* remove component support
 
 0.0.11
 ------
