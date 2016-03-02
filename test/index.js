@@ -76,6 +76,7 @@ test( 'get from array', function( t ) {
         }
     };
     t.equal( delver.get( obj, 'foo.bar[1]', 2 ), 2 );
+    t.equal( delver.get( obj, 'foo.bar[ 1 ]', 2 ), 2 );
     t.equal( delver.get( obj, 'foo.bar[100]', 'fallback' ), 'fallback' );
 
     t.end();
@@ -188,6 +189,9 @@ test( 'recursive object set', function( t ) {
 
     delver.set( obj, 'foo.bar', 'value2' );
     t.equal( obj.foo.bar, 'value2' );
+
+    delver.set( obj, 'foo.blah yak', 'value3' );
+    t.equal( obj.foo[ 'blah yak' ], 'value3' );
 
     t.end();
 } );
