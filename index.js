@@ -77,7 +77,7 @@ function delve( options ) {
 
         if ( /\[/.test( part ) ) {
             const found = part.match( arraymatcher );
-            if ( found.length !== 3 ) {
+            if ( !isArray( found ) || found.length !== 3 ) {
                 throw new Error( 'Subkey \'' + getSubkey( parts, i ) + '\' is not a valid array accessor. (' + options.key + ')' );
             }
 

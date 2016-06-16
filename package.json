@@ -1,56 +1,53 @@
 {
-  "name": "delver",
-  "version": "1.1.1",
-  "description": "Read and update nested objects using simple patterns.",
-  "main": "index.js",
-  "devDependencies": {
-    "tap-spec": "^4.1.1",
-    "tape": "~1.1.0"
-  },
-  "scripts": {
-    "test": "tape test/*.js | tap-spec"
-  },
-  "keywords": [
-    "accessor",
-    "traversal",
-    "pattern",
-    "access",
-    "object",
-    "nested",
-    "path"
-  ],
-  "testling": {
-    "files": "test/*.js",
-    "browsers": [
-      "ie/10..latest",
-      "chrome/20..latest",
-      "firefox/18..latest",
-      "safari/latest",
-      "opera/11.0..latest",
-      "iphone/6",
-      "ipad/6"
-    ]
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/andyburke/node-delver.git"
-  },
-  "homepage": "https://github.com/andyburke/node-delver",
-  "author": {
-    "name": "Andy Burke",
-    "email": "aburke@bitflood.org",
-    "url": "http://github.com/andyburke"
-  },
-  "contributors": [
-    {
-      "name": "Tim Taubert",
-      "email": "tim@timtaubert.de",
-      "url": "http://timtaubert.de/"
+    "name": "delver",
+    "version": "1.1.2",
+    "description": "Read and update nested objects using simple patterns.",
+    "main": "index.js",
+    "devDependencies": {
+        "tap-spec": "^4.1.1",
+        "tape": "~1.1.0"
     },
-    {
-      "name": "Jacob Lowe",
-      "url": "https://github.com/jacoblwe20"
-    }
-  ],
-  "license": "MIT"
+    "scripts": {
+        "test": "tape test/*.js | tap-spec"
+    },
+    "keywords": [
+        "accessor",
+        "traversal",
+        "pattern",
+        "access",
+        "object",
+        "nested",
+        "path"
+    ],
+    "testling": {
+        "files": "test/*.js",
+        "browsers": [
+            "ie/10..latest",
+            "chrome/20..latest",
+            "firefox/18..latest",
+            "safari/latest",
+            "opera/11.0..latest",
+            "iphone/6",
+            "ipad/6"
+        ]
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/andyburke/node-delver.git"
+    },
+    "homepage": "https://github.com/andyburke/node-delver",
+    "author": {
+        "name": "Andy Burke",
+        "email": "aburke@bitflood.org",
+        "url": "http://github.com/andyburke"
+    },
+    "contributors": [ {
+        "name": "Tim Taubert",
+        "email": "tim@timtaubert.de",
+        "url": "http://timtaubert.de/"
+    }, {
+        "name": "Jacob Lowe",
+        "url": "https://github.com/jacoblwe20"
+    } ],
+    "license": "MIT"
 }

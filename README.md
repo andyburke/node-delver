@@ -179,54 +179,6 @@ npm install delver
 
 MIT
 
-# Changelog
-
-1.0.0
------
-* ES6
-* remove component support
-
-0.0.11
-------
-* Cleanups, adding in .jshint (not everything yet passes) and .jsbeautifier settings
-* Some more tests for broken deep link chains
-
-0.0.10
------
-* Add ability to get internal object via .get() with no arguments
-* Fix up jshint warnings
-
-0.0.9
------
-* Fix a silly bug in .get
-
-0.0.8
------
-* Special-case adding a single item to an array to help with some specific cases where .push() is
-  preferred to using concat
-
-0.0.7
------
-* Allow specifying a constructor to use
-
-0.0.6
------
-* Fix some issues when reading from nonexistent items
-
-0.0.5
------
-* Rename to Delver
-* Refactor get/set to use a single traversal method
-* Allow for strict/unstrict access (respects/doesn't respect hasOwnProperty)
-
-0.0.4
------
-* Add component support
-
-0.0.3
------
-* Allow for array element access
-
 # Credits
 
 Delver is based off a fork of Tim Taubert's [node-accessors](https://github.com/ttaubert/node-accessors). Many

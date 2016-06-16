@@ -320,5 +320,11 @@ test( 'correct error conditions', function( t ) {
         }, 'foo.bar', 'value' );
     } );
 
+    t.throws( function() {
+        delver.get( {}, 'weird[-200],-100.path' );
+    }, ex => {
+        return typeof ex === 'object' && ex.message && /^Subkey/.test( ex.message );
+    } );
+
     t.end();
 } );
