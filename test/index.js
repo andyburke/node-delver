@@ -322,9 +322,7 @@ test( 'correct error conditions', function( t ) {
 
     t.throws( function() {
         delver.get( {}, 'weird[-200],-100.path' );
-    }, ex => {
-        return typeof ex === 'object' && ex.message && /^Subkey/.test( ex.message );
-    } );
+    }, /Subkey/ );
 
     t.end();
 } );
