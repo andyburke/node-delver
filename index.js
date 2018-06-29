@@ -68,7 +68,7 @@ function delve( options ) {
             throw new Error( 'Key is invalid: ' + options.key );
         }
 
-        let exists = options.strict ? obj.hasOwnProperty( part ) : typeof obj[ part ] !== 'undefined';
+        let exists = options.strict && obj.hasOwnProperty ? obj.hasOwnProperty( part ) : typeof obj[ part ] !== 'undefined';
 
         // if we are not strict and this key part does not exist, stop and return undefined
         // if ( !exists && !options.strict ) {
