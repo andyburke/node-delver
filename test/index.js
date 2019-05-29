@@ -42,6 +42,21 @@ test( 'get nonexistent deep value', function( t ) {
     t.end();
 } );
 
+test( 'get nonexistent deep value with null in path', function( t ) {
+    let obj = {
+        foo: {
+            bar: {
+                baz: 'value'
+            },
+            yak: null
+        }
+    };
+    t.equal( delver.get( obj, 'foo.bar.baz' ), 'value' );
+    t.equal( delver.get( obj, 'foo.yak.test' ), void 0 );
+
+    t.end();
+} );
+
 test( 'get existing with fallback', function( t ) {
     let obj = {
         foo: {
